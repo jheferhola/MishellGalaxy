@@ -321,18 +321,13 @@
         ===================================================== */
 
         #recuerdos-button {
-            position: fixed;
-            top: 155px;
-            left: 25px;
-            z-index: 60;
-            display: inline-flex;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity .5s ease, visibility .5s ease, transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+            display: none !important;
+            position: static;
             align-items: center;
             gap: 12px;
-            max-width: calc(100vw - 32px);
+            width: fit-content;
+            max-width: 100%;
+            margin-top: 14px;
             padding: 13px 18px;
             border: 1px solid rgba(255, 216, 77, .55);
             border-radius: 16px;
@@ -341,12 +336,19 @@
             background: linear-gradient(135deg, rgba(42, 22, 72, .94), rgba(116, 35, 91, .94));
             box-shadow: 0 8px 28px rgba(0, 0, 0, .35), 0 0 22px rgba(255, 105, 180, .16);
             backdrop-filter: blur(10px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(6px);
+            transition: opacity .5s ease, transform .5s ease;
         }
 
         #recuerdos-button.show {
+            display: flex !important;
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
+            transform: translateY(0);
         }
 
         #recuerdos-button:hover {
@@ -380,8 +382,6 @@
 
         @media (max-width: 700px) {
             #recuerdos-button {
-                top: 108px;
-                left: 12px;
                 padding: 10px 13px;
                 gap: 9px;
                 border-radius: 13px;
@@ -918,15 +918,16 @@
 
     </p>
 
+    <!-- BOTÓN DE ACCESO A LOS RECUERDOS: aparece al iniciar -->
+    <a id="recuerdos-button" href="nuestros-recuerdos.html" aria-label="Ir a Nuestro Inicio de Recuerdos">
+        <span class="recuerdos-heart" aria-hidden="true">♡</span>
+        <span>
+            <strong>Nuestro Inicio de Recuerdos</strong>
+            <small>Un pequeño viaje a lo que vivimos juntos ✨</small>
+        </span>
+    </a>
+
 </div>
-<!-- BOTÓN DE ACCESO A LOS RECUERDOS -->
-<a id="recuerdos-button" href="nuestros-recuerdos.html" aria-label="Ir a Nuestro Inicio de Recuerdos">
-    <span class="recuerdos-heart" aria-hidden="true">♡</span>
-    <span>
-        <strong>Nuestro Inicio de Recuerdos</strong>
-        <small>Un pequeño viaje a lo que vivimos juntos ✨</small>
-    </span>
-</a>
 
 
 <!-- =========================================================
@@ -2522,6 +2523,15 @@ function activateGalaxy() {
         .classList.add(
             "hide"
         );
+
+
+    /*
+     * MOSTRAR BOTÓN DE RECUERDOS
+     * solo después de iniciar la galaxia.
+     */
+    const recuerdosButton = document.getElementById("recuerdos-button");
+    recuerdosButton.classList.add("show");
+    recuerdosButton.style.setProperty("display", "flex", "important");
 
 
     /*
@@ -4711,6 +4721,10 @@ function reset() {
         .classList.remove(
             "hide"
         );
+
+    const recuerdosButton = document.getElementById("recuerdos-button");
+    recuerdosButton.classList.remove("show");
+    recuerdosButton.style.removeProperty("display");
 
 
     cameraYaw = 0;
