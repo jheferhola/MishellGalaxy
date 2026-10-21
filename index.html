@@ -1,0 +1,4908 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Galaxia Mishell ❤️</title>
+
+
+    <!-- TAILWIND -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- FUENTES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <!-- THREE.JS -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+    </script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+
+            width: 100%;
+            height: 100%;
+
+            margin: 0;
+
+            overflow: hidden;
+
+            background: #000;
+
+            font-family:
+                "Montserrat",
+                sans-serif;
+
+        }
+
+
+        body {
+
+            color: white;
+
+        }
+
+
+        /* =====================================================
+           CANVAS
+        ===================================================== */
+
+        #canvas-container {
+
+            position: fixed;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            overflow: hidden;
+
+            background: #000;
+
+        }
+
+
+        #canvas-container canvas {
+
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            touch-action: none;
+
+        }
+
+
+        /* =====================================================
+           INTRO
+        ===================================================== */
+
+        #instruction-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 50;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            /*
+             * NEGRO COMPLETAMENTE OPACO
+             *
+             * La galaxia existe detrás,
+             * pero no se verá al entrar.
+             */
+
+            background: #000;
+
+            transition:
+
+                opacity 1.2s ease,
+
+                visibility 1.2s ease;
+
+            pointer-events: none;
+
+        }
+
+
+        #instruction-overlay.hide {
+
+            opacity: 0;
+
+            visibility: hidden;
+
+        }
+
+
+        .intro-content {
+
+            text-align: center;
+
+        }
+
+
+        .intro-title {
+
+            font-family:
+                "Cinzel",
+                serif;
+
+            font-size:
+                clamp(
+                    42px,
+                    8vw,
+                    80px
+                );
+
+            color: #ffd84d;
+
+            text-shadow:
+
+                0 0 10px
+                rgba(255, 210, 70, .9),
+
+                0 0 30px
+                rgba(255, 180, 0, .5);
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .intro-text {
+
+            color: #d9dce5;
+
+            font-size: 15px;
+
+        }
+
+
+        .intro-hint {
+
+            margin-top: 30px;
+
+            color: #ffd84d;
+
+            animation:
+                pulse 1.5s infinite;
+
+        }
+
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+
+                transform: scale(1);
+
+                opacity: .5;
+
+            }
+
+            50% {
+
+                transform: scale(1.08);
+
+                opacity: 1;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           PANEL SUPERIOR
+        ===================================================== */
+
+        #top-panel {
+
+            position: fixed;
+
+            top: 25px;
+
+            left: 25px;
+
+            z-index: 20;
+
+            max-width: 495px;
+
+            padding: 18px 20px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(
+                    3,
+                    6,
+                    20,
+                    .78
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    193,
+                    7,
+                    .48
+                );
+
+            backdrop-filter: blur(10px);
+
+            box-shadow:
+                0 0 30px
+                rgba(
+                    255,
+                    190,
+                    0,
+                    .07
+                );
+
+        }
+
+
+        #top-panel h1 {
+
+            margin:
+                0 0 10px;
+
+            font-family:
+                "Cinzel",
+                serif;
+
+            font-size: 34px;
+
+            color: #ffd84d;
+
+            text-shadow:
+                0 0 15px
+                rgba(
+                    255,
+                    200,
+                    50,
+                    .55
+                );
+
+        }
+
+
+        #top-panel p {
+
+            margin: 0;
+
+            color: #cbd0dc;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =====================================================
+           HINT INFERIOR
+        ===================================================== */
+
+        #bottom-hint {
+
+            position: fixed;
+
+            bottom: 22px;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+
+            z-index: 20;
+
+            padding:
+                11px 22px;
+
+            border-radius: 30px;
+
+            background:
+                rgba(
+                    4,
+                    8,
+                    25,
+                    .80
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    193,
+                    7,
+                    .45
+                );
+
+            color: #f6d66d;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+
+        }
+
+
+        /* =====================================================
+           MODALES
+        ===================================================== */
+
+        .modal {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 100;
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .88
+                );
+
+            backdrop-filter:
+                blur(10px);
+
+        }
+
+
+        .modal.active {
+
+            display: flex;
+
+        }
+
+
+        .modal-box {
+
+            position: relative;
+
+            width:
+                min(
+                    760px,
+                    100%
+                );
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            padding: 25px;
+
+            border-radius: 24px;
+
+            background:
+
+                linear-gradient(
+                    145deg,
+                    rgba(
+                        10,
+                        15,
+                        38,
+                        .98
+                    ),
+                    rgba(
+                        2,
+                        4,
+                        15,
+                        .98
+                    )
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    193,
+                    7,
+                    .45
+                );
+
+            box-shadow:
+                0 0 70px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .8
+                );
+
+        }
+
+
+        .close-btn {
+
+            position: absolute;
+
+            top: 14px;
+
+            right: 14px;
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .15
+                );
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .06
+                );
+
+            color: white;
+
+            cursor: pointer;
+
+        }
+
+
+        .modal-title {
+
+            margin:
+                0 0 20px;
+
+            text-align: center;
+
+            font-family:
+                "Cinzel",
+                serif;
+
+            font-size: 28px;
+
+            color: #ffd84d;
+
+        }
+
+
+        /* =====================================================
+           EDITOR
+        ===================================================== */
+
+        .message-row {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+
+            gap: 15px;
+
+            padding: 13px;
+
+            margin-bottom: 10px;
+
+            border-radius: 13px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .04
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .08
+                );
+
+        }
+
+
+        .message-row strong {
+
+            display: block;
+
+            color: #ffd84d;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .message-row span {
+
+            color: #bfc5d2;
+
+            font-size: 12px;
+
+        }
+
+
+        .delete-btn {
+
+            width: 38px;
+
+            height: 38px;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    70,
+                    70,
+                    .3
+                );
+
+            background:
+                rgba(
+                    255,
+                    50,
+                    50,
+                    .08
+                );
+
+            color: #ff8585;
+
+            cursor: pointer;
+
+        }
+
+
+        .input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 10px;
+
+            border-radius: 11px;
+
+            outline: none;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .12
+                );
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .05
+                );
+
+            color: white;
+
+        }
+
+
+        .input:focus {
+
+            border-color: #ffd84d;
+
+        }
+
+
+        .gold-btn {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: 0;
+
+            border-radius: 11px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #b8860b,
+                    #ffd84d
+                );
+
+            color: #171100;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =====================================================
+           VIDEO
+        ===================================================== */
+
+        #viewer-video {
+
+            display: block;
+
+            width: 100%;
+
+            max-height: 72vh;
+
+            background: #000;
+
+            border-radius: 15px;
+
+        }
+
+
+        #video-info {
+
+            margin-top: 12px;
+
+            text-align: center;
+
+            color: #aeb6c8;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            #top-panel {
+
+                top: 12px;
+
+                left: 12px;
+
+                right: 12px;
+
+                max-width: none;
+
+                padding: 13px;
+
+            }
+
+
+            #top-panel h1 {
+
+                font-size: 24px;
+
+            }
+
+
+            #top-panel p {
+
+                font-size: 10px;
+
+            }
+
+
+            #bottom-hint {
+
+                bottom: 15px;
+
+                font-size: 9px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     CANVAS
+========================================================= -->
+
+<div id="canvas-container"></div>
+
+
+<!-- =========================================================
+     INTRO
+========================================================= -->
+
+<div id="instruction-overlay">
+
+    <div class="intro-content">
+
+        <div class="intro-title">
+
+            GALAXIA MISHELL
+
+        </div>
+
+
+        <div class="intro-text">
+
+            Hay un pequeño universo preparado especialmente para ti.
+
+            <br>
+
+            Toca la rosa para descubrirlo.
+
+        </div>
+
+
+        <div class="intro-hint">
+
+            <i class="fas fa-hand-pointer"></i>
+
+            &nbsp;
+
+            Toca la rosa
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PANEL SUPERIOR
+========================================================= -->
+
+<div id="top-panel">
+
+    <h1>
+
+        GALAXIA MISHELL
+
+    </h1>
+
+
+    <p>
+
+        Toca cualquier mensaje o pantalla de vídeo para descubrir
+        una sorpresa.
+
+    </p>
+
+</div>
+
+
+<!-- =========================================================
+     HINT INFERIOR
+========================================================= -->
+
+<div id="bottom-hint">
+
+    <i class="fas fa-hand-pointer"></i>
+
+    &nbsp;
+
+    Toca un mensaje o un vídeo para descubrirlo
+
+</div>
+
+
+<!-- =========================================================
+     MODAL EDITOR
+     Se conserva para no eliminar la función,
+     aunque ya no hay botón arriba.
+========================================================= -->
+
+<div
+    id="editor-modal"
+    class="modal">
+
+    <div class="modal-box">
+
+        <button
+            id="close-editor"
+            class="close-btn">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
+
+        <h2 class="modal-title">
+
+            Editar mensajes
+
+        </h2>
+
+
+        <div
+            id="messages-container">
+        </div>
+
+
+        <div
+            class="border-t border-white/10 my-5">
+        </div>
+
+
+        <h3
+            class="text-yellow-300 font-bold mb-3">
+
+            Agregar mensaje
+
+        </h3>
+
+
+        <input
+            id="new-title"
+            class="input"
+            placeholder="Título">
+
+
+        <textarea
+            id="new-message"
+            class="input"
+            rows="4"
+            placeholder="Mensaje"></textarea>
+
+
+        <button
+            id="add-message"
+            class="gold-btn">
+
+            <i class="fas fa-plus"></i>
+
+            &nbsp;
+
+            Agregar mensaje
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL VIDEO
+========================================================= -->
+
+<div
+    id="video-modal"
+    class="modal">
+
+    <div
+        class="modal-box"
+        style="width:min(1000px,100%);">
+
+
+        <button
+            id="close-video-modal"
+            class="close-btn">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
+
+        <h2 class="modal-title">
+
+            Vídeos de nuestra galaxia
+
+        </h2>
+
+
+        <video
+            id="viewer-video"
+            controls
+            playsinline>
+        </video>
+
+
+        <div id="video-info">
+
+            Selecciona un vídeo.
+
+        </div>
+
+
+        <div
+            class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-5">
+
+
+            <button
+                class="control-btn video-selector"
+                data-index="0">
+
+                VIDEO 1
+
+            </button>
+
+
+            <button
+                class="control-btn video-selector"
+                data-index="1">
+
+                VIDEO 2
+
+            </button>
+
+
+            <button
+                class="control-btn video-selector"
+                data-index="2">
+
+                VIDEO 3
+
+            </button>
+
+
+            <button
+                class="control-btn video-selector"
+                data-index="3">
+
+                VIDEO 4
+
+            </button>
+
+
+            <button
+                class="control-btn video-selector"
+                data-index="4">
+
+                VIDEO 5
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL CARTA
+========================================================= -->
+
+<div
+    id="letter-modal"
+    class="modal">
+
+
+    <div
+        class="modal-box text-center">
+
+
+        <button
+            id="close-letter"
+            class="close-btn">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
+
+        <div class="text-7xl mb-4">
+
+            🌷🌷🌷
+
+        </div>
+
+
+        <h2
+            id="letter-title"
+            class="modal-title">
+
+            Para ti
+
+        </h2>
+
+
+        <p
+            id="letter-message"
+            class="text-gray-200 leading-8">
+
+        </p>
+
+
+        <div
+            class="mt-7 text-yellow-300 text-xl">
+
+            ✨ ❤️ ✨
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* ============================================================
+   VARIABLES
+============================================================ */
+
+let scene;
+
+let camera;
+
+let renderer;
+
+let raycaster;
+
+let mouse;
+
+let clock;
+
+let roseGroup;
+
+let galaxyGroup;
+
+let stars;
+
+let state = "ROSE";
+
+
+
+/* ============================================================
+   MENSAJES
+============================================================ */
+
+let messages = [
+
+    {
+        id: 1,
+
+        title: "Mishell",
+
+        text:
+            "Entre millones de estrellas, siempre encontraría la forma de llegar hasta ti."
+
+    },
+
+
+    {
+        id: 2,
+
+        title: "Te Adoro",
+
+        text:
+            "Hay personas que llegan a nuestra vida y terminan convirtiéndose en nuestro lugar favorito."
+
+    },
+
+
+    {
+        id: 3,
+
+        title: "Mi Vida",
+
+        text:
+            "No necesito un universo perfecto, solo uno donde pueda compartir momentos contigo."
+
+    },
+
+
+    {
+        id: 4,
+
+        title: "Eres Mi Sol",
+
+        text:
+            "Incluso en los días más oscuros, tu sonrisa tiene una forma especial de iluminarlo todo."
+
+    },
+
+
+    {
+        id: 5,
+
+        title: "Mi Tulipán",
+
+        text:
+            "Como un tulipán entre flores, hay algo en ti que siempre consigue llamar mi atención."
+
+    }
+
+];
+
+
+let messageObjects = [];
+
+
+/* ============================================================
+   VIDEOS
+============================================================ */
+
+const videos = [
+
+    {
+        title: "Nuestro recuerdo ✨",
+
+        src: "videos/11.mp4"
+
+    },
+
+
+    {
+        title: "Un momento para ti 💕",
+
+        src: "videos/22.mp4"
+
+    },
+
+
+    {
+        title: "Para Mishell 🌷",
+
+        src: "videos/33.mp4"
+
+    },
+
+
+    {
+        title: "Un recuerdo más 💫",
+
+        src: "videos/44.mp4"
+
+    },
+
+
+    {
+        title: "Siempre tú ❤️",
+
+        src: "videos/55.mp4"
+
+    }
+
+];
+
+
+let videoObjects = [];
+
+let selectedVideo = null;
+
+
+/* ============================================================
+   SONIDOS
+============================================================ */
+
+/*
+ * Sonido corto de explosión.
+ *
+ * Coloca:
+ *
+ * audio/explosion.mp3
+ */
+
+const boomSound =
+    new Audio(
+        "audio/explosion.mp3"
+    );
+
+
+boomSound.preload = "auto";
+
+boomSound.volume = 0.9;
+
+
+/*
+ * Música de fondo.
+ *
+ * Coloca:
+ *
+ * audio/shivers.mp3
+ */
+
+const galaxyMusic =
+    new Audio(
+        "audio/shivers.mp3"
+    );
+
+
+galaxyMusic.preload = "auto";
+
+galaxyMusic.loop = true;
+
+galaxyMusic.volume = 0.65;
+
+
+/* ============================================================
+   CÁMARA
+============================================================ */
+
+let cameraYaw = 0;
+
+let cameraPitch = 0;
+
+let targetYaw = 0;
+
+let targetPitch = 0;
+
+let cameraDistance = 24;
+
+
+let pointerDown = false;
+
+let pointerMoved = false;
+
+let lastX = 0;
+
+let lastY = 0;
+
+
+/* ============================================================
+   INICIO
+============================================================ */
+
+window.addEventListener(
+    "load",
+    function () {
+
+        console.log(
+            "GALAXIA MISHELL: iniciando..."
+        );
+
+
+        init();
+
+    }
+);
+
+
+/* ============================================================
+   INIT
+============================================================ */
+
+function init() {
+
+    try {
+
+        initThree();
+
+        createStars();
+
+        createGalaxy();
+
+        createRose();
+
+        createMessages();
+
+        createVideos();
+
+        setupEvents();
+
+        animate();
+
+
+        console.log(
+            "GALAXIA MISHELL: cargada correctamente."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "ERROR PRINCIPAL:",
+            error
+        );
+
+
+        alert(
+            "Hubo un error al iniciar la galaxia. Abre F12 > Console para ver el error."
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   THREE
+============================================================ */
+
+function initThree() {
+
+    const container =
+        document.getElementById(
+            "canvas-container"
+        );
+
+
+    scene =
+        new THREE.Scene();
+
+
+    camera =
+        new THREE.PerspectiveCamera(
+
+            55,
+
+            window.innerWidth /
+            window.innerHeight,
+
+            0.1,
+
+            500
+
+        );
+
+
+    camera.position.set(
+        0,
+        0,
+        cameraDistance
+    );
+
+
+    camera.lookAt(
+        0,
+        0,
+        0
+    );
+
+
+    renderer =
+        new THREE.WebGLRenderer({
+
+            antialias: true,
+
+            alpha: true
+
+        });
+
+
+    renderer.setPixelRatio(
+        Math.min(
+            window.devicePixelRatio,
+            2
+        )
+    );
+
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+
+    renderer.outputEncoding =
+        THREE.sRGBEncoding;
+
+
+    container.appendChild(
+        renderer.domElement
+    );
+
+
+    renderer.domElement.style.touchAction =
+        "none";
+
+
+    raycaster =
+        new THREE.Raycaster();
+
+
+    mouse =
+        new THREE.Vector2();
+
+
+    clock =
+        new THREE.Clock();
+
+
+    window.addEventListener(
+        "resize",
+        resize
+    );
+
+
+    setupCanvasEvents();
+
+}
+
+
+/* ============================================================
+   RESIZE
+============================================================ */
+
+function resize() {
+
+    camera.aspect =
+        window.innerWidth /
+        window.innerHeight;
+
+
+    camera.updateProjectionMatrix();
+
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+}
+
+
+/* ============================================================
+   ESTRELLAS
+============================================================ */
+
+function createStars() {
+
+    const count = 7000;
+
+
+    const geometry =
+        new THREE.BufferGeometry();
+
+
+    const positions =
+        new Float32Array(
+            count * 3
+        );
+
+
+    const colors =
+        new Float32Array(
+            count * 3
+        );
+
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        const radius =
+            25 +
+            Math.random() * 100;
+
+
+        const theta =
+            Math.random() *
+            Math.PI *
+            2;
+
+
+        const phi =
+            Math.acos(
+                2 *
+                Math.random() -
+                1
+            );
+
+
+        positions[i * 3] =
+            radius *
+            Math.sin(phi) *
+            Math.cos(theta);
+
+
+        positions[i * 3 + 1] =
+            radius *
+            Math.cos(phi);
+
+
+        positions[i * 3 + 2] =
+            radius *
+            Math.sin(phi) *
+            Math.sin(theta);
+
+
+        colors[i * 3] =
+            0.5 +
+            Math.random() *
+            0.5;
+
+
+        colors[i * 3 + 1] =
+            0.5 +
+            Math.random() *
+            0.5;
+
+
+        colors[i * 3 + 2] =
+            0.6 +
+            Math.random() *
+            0.4;
+
+    }
+
+
+    geometry.setAttribute(
+        "position",
+
+        new THREE.BufferAttribute(
+            positions,
+            3
+        )
+    );
+
+
+    geometry.setAttribute(
+        "color",
+
+        new THREE.BufferAttribute(
+            colors,
+            3
+        )
+    );
+
+
+    const material =
+        new THREE.PointsMaterial({
+
+            size: 0.075,
+
+            vertexColors: true,
+
+            transparent: true,
+
+            opacity: .8,
+
+            depthWrite: false
+
+        });
+
+
+    stars =
+        new THREE.Points(
+            geometry,
+            material
+        );
+
+
+    scene.add(
+        stars
+    );
+
+}
+
+
+/* ============================================================
+   GALAXIA
+============================================================ */
+
+function createGalaxy() {
+
+    galaxyGroup =
+        new THREE.Group();
+
+
+    const count = 11000;
+
+
+    const geometry =
+        new THREE.BufferGeometry();
+
+
+    const positions =
+        new Float32Array(
+            count * 3
+        );
+
+
+    const colors =
+        new Float32Array(
+            count * 3
+        );
+
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        const radius =
+            Math.random() * 14;
+
+
+        const angle =
+            radius *
+            1.25 +
+            Math.random() *
+            Math.PI *
+            2;
+
+
+        const spread =
+            (
+                Math.random() -
+                .5
+            ) *
+            (
+                .4 +
+                radius *
+                .05
+            );
+
+
+        positions[i * 3] =
+            Math.cos(angle) *
+            radius +
+            spread;
+
+
+        positions[i * 3 + 1] =
+            (
+                Math.random() -
+                .5
+            ) *
+            1.7;
+
+
+        positions[i * 3 + 2] =
+            Math.sin(angle) *
+            radius +
+            spread;
+
+
+        colors[i * 3] = 1;
+
+
+        colors[i * 3 + 1] =
+            .35 +
+            Math.random() *
+            .5;
+
+
+        colors[i * 3 + 2] =
+            Math.random() *
+            .15;
+
+    }
+
+
+    geometry.setAttribute(
+        "position",
+
+        new THREE.BufferAttribute(
+            positions,
+            3
+        )
+    );
+
+
+    geometry.setAttribute(
+        "color",
+
+        new THREE.BufferAttribute(
+            colors,
+            3
+        )
+    );
+
+
+    const material =
+        new THREE.PointsMaterial({
+
+            size: .045,
+
+            vertexColors: true,
+
+            transparent: true,
+
+            opacity: .7,
+
+            depthWrite: false
+
+        });
+
+
+    const particles =
+        new THREE.Points(
+            geometry,
+            material
+        );
+
+
+    galaxyGroup.add(
+        particles
+    );
+
+
+    /*
+     * SOL
+     */
+
+    const sun =
+        new THREE.Mesh(
+
+            new THREE.SphereGeometry(
+                1,
+                32,
+                32
+            ),
+
+            new THREE.MeshBasicMaterial({
+
+                color: 0xffdf8a
+
+            })
+
+        );
+
+
+    galaxyGroup.add(
+        sun
+    );
+
+
+    /*
+     * AURA
+     */
+
+    const aura =
+        new THREE.Mesh(
+
+            new THREE.SphereGeometry(
+                1.5,
+                32,
+                32
+            ),
+
+            new THREE.MeshBasicMaterial({
+
+                color: 0xffb300,
+
+                transparent: true,
+
+                opacity: .15,
+
+                side:
+                    THREE.BackSide
+
+            })
+
+        );
+
+
+    galaxyGroup.add(
+        aura
+    );
+
+
+    scene.add(
+        galaxyGroup
+    );
+
+}
+
+
+/* ============================================================
+   ROSA
+============================================================ */
+
+function createRose() {
+
+    roseGroup =
+        new THREE.Group();
+
+
+    /*
+     * TALLO
+     */
+
+    const stem =
+        new THREE.Mesh(
+
+            new THREE.CylinderGeometry(
+                .07,
+                .09,
+                3.5,
+                16
+            ),
+
+            new THREE.MeshBasicMaterial({
+
+                color: 0x2c783d
+
+            })
+
+        );
+
+
+    stem.position.y =
+        -1.6;
+
+
+    roseGroup.add(
+        stem
+    );
+
+
+    /*
+     * CENTRO
+     */
+
+    const center =
+        new THREE.Mesh(
+
+            new THREE.SphereGeometry(
+                .6,
+                24,
+                24
+            ),
+
+            new THREE.MeshBasicMaterial({
+
+                color: 0xff174d
+
+            })
+
+        );
+
+
+    center.position.y =
+        .3;
+
+
+    roseGroup.add(
+        center
+    );
+
+
+    /*
+     * PÉTALOS
+     */
+
+    for (
+        let i = 0;
+        i < 18;
+        i++
+    ) {
+
+        const angle =
+            i /
+            18 *
+            Math.PI *
+            2;
+
+
+        const petal =
+            new THREE.Mesh(
+
+                new THREE.SphereGeometry(
+                    .55,
+                    18,
+                    12
+                ),
+
+                new THREE.MeshBasicMaterial({
+
+                    color:
+
+                        i % 2 === 0
+
+                            ? 0xff315f
+
+                            : 0xd91849
+
+                })
+
+            );
+
+
+        petal.scale.set(
+            1.4,
+            .35,
+            .75
+        );
+
+
+        petal.position.x =
+            Math.cos(angle) *
+            .5;
+
+
+        petal.position.z =
+            Math.sin(angle) *
+            .5;
+
+
+        petal.position.y =
+            .3;
+
+
+        petal.rotation.y =
+            angle;
+
+
+        roseGroup.add(
+            petal
+        );
+
+    }
+
+
+    /*
+     * AURA
+     */
+
+    const roseAura =
+        new THREE.Mesh(
+
+            new THREE.SphereGeometry(
+                2,
+                32,
+                32
+            ),
+
+            new THREE.MeshBasicMaterial({
+
+                color: 0xff315f,
+
+                transparent: true,
+
+                opacity: .13,
+
+                side:
+                    THREE.BackSide
+
+            })
+
+        );
+
+
+    roseGroup.add(
+        roseAura
+    );
+
+
+    roseGroup.scale.set(
+        1.3,
+        1.3,
+        1.3
+    );
+
+
+    scene.add(
+        roseGroup
+    );
+
+}
+
+
+/* ============================================================
+   EVENTOS DEL CANVAS
+============================================================ */
+
+function setupCanvasEvents() {
+
+    const canvas =
+        renderer.domElement;
+
+
+    canvas.addEventListener(
+        "pointerdown",
+        function (event) {
+
+            pointerDown = true;
+
+            pointerMoved = false;
+
+            lastX =
+                event.clientX;
+
+            lastY =
+                event.clientY;
+
+        }
+    );
+
+
+    canvas.addEventListener(
+        "pointermove",
+        function (event) {
+
+            if (!pointerDown) {
+
+                return;
+
+            }
+
+
+            const dx =
+                event.clientX -
+                lastX;
+
+
+            const dy =
+                event.clientY -
+                lastY;
+
+
+            if (
+                Math.abs(dx) > 2 ||
+                Math.abs(dy) > 2
+            ) {
+
+                pointerMoved = true;
+
+            }
+
+
+            if (
+                state === "GALAXY"
+            ) {
+
+                targetYaw +=
+                    dx *
+                    .006;
+
+
+                targetPitch +=
+                    dy *
+                    .004;
+
+
+                targetPitch =
+                    THREE.MathUtils.clamp(
+
+                        targetPitch,
+
+                        -1.2,
+
+                        1.2
+
+                    );
+
+            }
+
+
+            lastX =
+                event.clientX;
+
+
+            lastY =
+                event.clientY;
+
+        }
+    );
+
+
+    canvas.addEventListener(
+        "pointerup",
+        function (event) {
+
+            if (!pointerDown) {
+
+                return;
+
+            }
+
+
+            pointerDown = false;
+
+
+            if (pointerMoved) {
+
+                return;
+
+            }
+
+
+            if (
+                state === "ROSE"
+            ) {
+
+                clickRose(
+
+                    event.clientX,
+
+                    event.clientY
+
+                );
+
+
+                return;
+
+            }
+
+
+            if (
+                state === "GALAXY"
+            ) {
+
+                const videoClicked =
+                    clickVideo(
+
+                        event.clientX,
+
+                        event.clientY
+
+                    );
+
+
+                if (
+                    videoClicked
+                ) {
+
+                    return;
+
+                }
+
+
+                clickMessage(
+
+                    event.clientX,
+
+                    event.clientY
+
+                );
+
+            }
+
+        }
+    );
+
+
+    canvas.addEventListener(
+        "pointercancel",
+        function () {
+
+            pointerDown = false;
+
+        }
+    );
+
+
+    canvas.addEventListener(
+        "wheel",
+        function (event) {
+
+            event.preventDefault();
+
+
+            cameraDistance +=
+                event.deltaY *
+                .015;
+
+
+            cameraDistance =
+                THREE.MathUtils.clamp(
+
+                    cameraDistance,
+
+                    12,
+
+                    45
+
+                );
+
+        },
+        {
+            passive: false
+        }
+    );
+
+}
+
+
+/* ============================================================
+   COORDENADAS MOUSE
+============================================================ */
+
+function setMouse(
+    clientX,
+    clientY
+) {
+
+    const rect =
+        renderer
+            .domElement
+            .getBoundingClientRect();
+
+
+    mouse.x =
+        (
+            (
+                clientX -
+                rect.left
+            ) /
+            rect.width
+        ) *
+        2 -
+        1;
+
+
+    mouse.y =
+        -(
+            (
+                clientY -
+                rect.top
+            ) /
+            rect.height
+        ) *
+        2 +
+        1;
+
+}
+
+
+/* ============================================================
+   CLIC ROSA
+============================================================ */
+
+function clickRose(
+    x,
+    y
+) {
+
+    setMouse(
+        x,
+        y
+    );
+
+
+    raycaster.setFromCamera(
+        mouse,
+        camera
+    );
+
+
+    const hits =
+        raycaster.intersectObjects(
+
+            roseGroup.children,
+
+            true
+
+        );
+
+
+    if (
+        hits.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    activateGalaxy();
+
+}
+
+
+/* ============================================================
+   ACTIVAR GALAXIA
+============================================================ */
+
+function activateGalaxy() {
+
+    state =
+        "GALAXY";
+
+
+    /*
+     * OCULTAR ROSA
+     */
+
+    roseGroup.visible =
+        false;
+
+
+    /*
+     * BOOM
+     */
+
+    boomSound.currentTime = 0;
+
+
+    const boomPromise =
+        boomSound.play();
+
+
+    if (
+        boomPromise &&
+        typeof boomPromise.catch ===
+            "function"
+    ) {
+
+        boomPromise.catch(
+            function (error) {
+
+                console.log(
+                    "No se pudo reproducir boom:",
+                    error
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+     * MÚSICA
+     */
+
+    galaxyMusic.currentTime = 0;
+
+
+    const musicPromise =
+        galaxyMusic.play();
+
+
+    if (
+        musicPromise &&
+        typeof musicPromise.catch ===
+            "function"
+    ) {
+
+        musicPromise.catch(
+            function (error) {
+
+                console.log(
+                    "No se pudo reproducir música:",
+                    error
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+     * QUITAR NEGRO
+     */
+
+    document
+        .getElementById(
+            "instruction-overlay"
+        )
+        .classList.add(
+            "hide"
+        );
+
+
+    /*
+     * EXPLOSIÓN VISUAL
+     */
+
+    createExplosion();
+
+}
+
+
+/* ============================================================
+   EXPLOSIÓN
+============================================================ */
+
+function createExplosion() {
+
+    const count = 500;
+
+
+    const positions =
+        new Float32Array(
+            count * 3
+        );
+
+
+    const velocities = [];
+
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        positions[i * 3] = 0;
+
+        positions[i * 3 + 1] = 0;
+
+        positions[i * 3 + 2] = 0;
+
+
+        velocities.push(
+
+            new THREE.Vector3(
+
+                Math.random() - .5,
+
+                Math.random() - .5,
+
+                Math.random() - .5
+
+            )
+                .normalize()
+                .multiplyScalar(
+
+                    .05 +
+                    Math.random() *
+                    .14
+
+                )
+
+        );
+
+    }
+
+
+    const geometry =
+        new THREE.BufferGeometry();
+
+
+    geometry.setAttribute(
+
+        "position",
+
+        new THREE.BufferAttribute(
+
+            positions,
+
+            3
+
+        )
+
+    );
+
+
+    const material =
+        new THREE.PointsMaterial({
+
+            color: 0xffd45a,
+
+            size: .08,
+
+            transparent: true,
+
+            opacity: 1
+
+        });
+
+
+    const particles =
+        new THREE.Points(
+
+            geometry,
+
+            material
+
+        );
+
+
+    scene.add(
+        particles
+    );
+
+
+    let life = 0;
+
+
+    function update() {
+
+        life += .018;
+
+
+        const pos =
+            geometry
+                .attributes
+                .position
+                .array;
+
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            pos[i * 3] +=
+                velocities[i].x;
+
+
+            pos[i * 3 + 1] +=
+                velocities[i].y;
+
+
+            pos[i * 3 + 2] +=
+                velocities[i].z;
+
+        }
+
+
+        geometry
+            .attributes
+            .position
+            .needsUpdate = true;
+
+
+        material.opacity =
+            Math.max(
+
+                0,
+
+                1 - life
+
+            );
+
+
+        if (
+            life < 1
+        ) {
+
+            requestAnimationFrame(
+                update
+            );
+
+        }
+
+        else {
+
+            scene.remove(
+                particles
+            );
+
+        }
+
+    }
+
+
+    update();
+
+}
+
+
+/* ============================================================
+   TEXTURA MENSAJE
+============================================================ */
+
+function createMessageTexture(
+    title,
+    text
+) {
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width = 900;
+
+    canvas.height = 300;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    ctx.fillStyle =
+        "rgba(5,10,32,.92)";
+
+
+    drawRoundedRect(
+
+        ctx,
+
+        20,
+
+        20,
+
+        860,
+
+        260,
+
+        30
+
+    );
+
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        "#d69f1c";
+
+
+    ctx.lineWidth = 6;
+
+
+    drawRoundedRect(
+
+        ctx,
+
+        20,
+
+        20,
+
+        860,
+
+        260,
+
+        30
+
+    );
+
+
+    ctx.stroke();
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.textBaseline =
+        "middle";
+
+
+    ctx.fillStyle =
+        "#ffe27b";
+
+
+    ctx.font =
+        "bold 48px Georgia";
+
+
+    ctx.fillText(
+
+        title,
+
+        450,
+
+        90
+
+    );
+
+
+    ctx.fillStyle =
+        "#e3e6ef";
+
+
+    ctx.font =
+        "26px Arial";
+
+
+    const words =
+        text.split(" ");
+
+
+    const lines = [];
+
+
+    let line = "";
+
+
+    for (
+        let i = 0;
+        i < words.length;
+        i++
+    ) {
+
+        const test =
+            line +
+            words[i] +
+            " ";
+
+
+        if (
+
+            ctx.measureText(
+                test
+            ).width > 690 &&
+
+            line
+
+        ) {
+
+            lines.push(
+                line
+            );
+
+
+            line =
+                words[i] +
+                " ";
+
+        }
+
+        else {
+
+            line =
+                test;
+
+        }
+
+    }
+
+
+    if (line) {
+
+        lines.push(
+            line
+        );
+
+    }
+
+
+    lines
+        .slice(
+            0,
+            3
+        )
+        .forEach(
+            (
+                item,
+                index
+            ) => {
+
+                ctx.fillText(
+
+                    item.trim(),
+
+                    450,
+
+                    155 +
+                    index * 35
+
+                );
+
+            }
+        );
+
+
+    return new THREE.CanvasTexture(
+        canvas
+    );
+
+}
+
+
+/* ============================================================
+   MENSAJES
+============================================================ */
+
+function createMessages() {
+
+    messageObjects.forEach(
+        object => {
+
+            scene.remove(
+                object
+            );
+
+        }
+    );
+
+
+    messageObjects = [];
+
+
+    const radius = 7;
+
+
+    messages.forEach(
+        (
+            item,
+            index
+        ) => {
+
+            const texture =
+                createMessageTexture(
+
+                    item.title,
+
+                    item.text
+
+                );
+
+
+            const material =
+                new THREE.SpriteMaterial({
+
+                    map: texture,
+
+                    transparent: true,
+
+                    depthTest: false
+
+                });
+
+
+            const sprite =
+                new THREE.Sprite(
+                    material
+                );
+
+
+            sprite.scale.set(
+
+                4.3,
+
+                1.43,
+
+                1
+
+            );
+
+
+            const angle =
+                index /
+                messages.length *
+                Math.PI *
+                2;
+
+
+            sprite.position.x =
+                Math.cos(angle) *
+                radius;
+
+
+            sprite.position.z =
+                Math.sin(angle) *
+                radius;
+
+
+            sprite.position.y =
+                index % 2 === 0
+                    ? 1.8
+                    : -1.2;
+
+
+            sprite.userData = {
+
+                type: "message",
+
+                data: item
+
+            };
+
+
+            scene.add(
+                sprite
+            );
+
+
+            messageObjects.push(
+                sprite
+            );
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   RECTÁNGULO REDONDEADO
+============================================================ */
+
+function drawRoundedRect(
+
+    ctx,
+
+    x,
+
+    y,
+
+    width,
+
+    height,
+
+    radius
+
+) {
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+
+        x + radius,
+
+        y
+
+    );
+
+
+    ctx.lineTo(
+
+        x + width - radius,
+
+        y
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x + width,
+
+        y,
+
+        x + width,
+
+        y + radius
+
+    );
+
+
+    ctx.lineTo(
+
+        x + width,
+
+        y + height - radius
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x + width,
+
+        y + height,
+
+        x + width - radius,
+
+        y + height
+
+    );
+
+
+    ctx.lineTo(
+
+        x + radius,
+
+        y + height
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x,
+
+        y + height,
+
+        x,
+
+        y + height - radius
+
+    );
+
+
+    ctx.lineTo(
+
+        x,
+
+        y + radius
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x,
+
+        y,
+
+        x + radius,
+
+        y
+
+    );
+
+
+    ctx.closePath();
+
+}
+
+
+/* ============================================================
+   VIDEOS
+============================================================ */
+
+function createVideos() {
+
+    videoObjects.forEach(
+        item => {
+
+            scene.remove(
+                item.group
+            );
+
+
+            item.video.pause();
+
+        }
+    );
+
+
+    videoObjects = [];
+
+
+    const radius = 10;
+
+    const width = 5.5;
+
+    const height = 3.1;
+
+
+    videos.forEach(
+        (
+            data,
+            index
+        ) => {
+
+
+            /*
+             * VIDEO REAL
+             */
+
+            const video =
+                document.createElement(
+                    "video"
+                );
+
+
+            video.src =
+                data.src;
+
+
+            video.preload =
+                "auto";
+
+
+            video.muted =
+                true;
+
+
+            video.loop =
+                true;
+
+
+            video.playsInline =
+                true;
+
+
+            video.setAttribute(
+                "playsinline",
+                ""
+            );
+
+
+            video.setAttribute(
+                "webkit-playsinline",
+                ""
+            );
+
+
+            video.load();
+
+
+            /*
+             * TEXTURA
+             */
+
+            const texture =
+                new THREE.VideoTexture(
+                    video
+                );
+
+
+            texture.minFilter =
+                THREE.LinearFilter;
+
+
+            texture.magFilter =
+                THREE.LinearFilter;
+
+
+            texture.format =
+                THREE.RGBAFormat;
+
+
+            /*
+             * PLANO
+             */
+
+            const videoMesh =
+                new THREE.Mesh(
+
+                    new THREE.PlaneGeometry(
+
+                        width,
+
+                        height
+
+                    ),
+
+                    new THREE.MeshBasicMaterial({
+
+                        map: texture,
+
+                        side:
+                            THREE.DoubleSide
+
+                    })
+
+                );
+
+
+            /*
+             * GRUPO
+             */
+
+            const group =
+                new THREE.Group();
+
+
+            group.add(
+                videoMesh
+            );
+
+
+            /*
+             * MARCO
+             */
+
+            const frameColor =
+
+                index % 2 === 0
+
+                    ? 0xffb800
+
+                    : 0x4da3ff;
+
+
+            const frameMaterial =
+                new THREE.MeshBasicMaterial({
+
+                    color:
+                        frameColor,
+
+                    transparent:
+                        true,
+
+                    opacity:
+                        .95
+
+                });
+
+
+            const thickness = .12;
+
+
+            const top =
+                new THREE.Mesh(
+
+                    new THREE.BoxGeometry(
+
+                        width + .25,
+
+                        thickness,
+
+                        .12
+
+                    ),
+
+                    frameMaterial
+
+                );
+
+
+            top.position.y =
+                height / 2;
+
+
+            const bottom =
+                new THREE.Mesh(
+
+                    new THREE.BoxGeometry(
+
+                        width + .25,
+
+                        thickness,
+
+                        .12
+
+                    ),
+
+                    frameMaterial
+
+                );
+
+
+            bottom.position.y =
+                -height / 2;
+
+
+            const left =
+                new THREE.Mesh(
+
+                    new THREE.BoxGeometry(
+
+                        thickness,
+
+                        height + .25,
+
+                        .12
+
+                    ),
+
+                    frameMaterial
+
+                );
+
+
+            left.position.x =
+                -width / 2;
+
+
+            const right =
+                new THREE.Mesh(
+
+                    new THREE.BoxGeometry(
+
+                        thickness,
+
+                        height + .25,
+
+                        .12
+
+                    ),
+
+                    frameMaterial
+
+                );
+
+
+            right.position.x =
+                width / 2;
+
+
+            group.add(top);
+
+            group.add(bottom);
+
+            group.add(left);
+
+            group.add(right);
+
+
+            /*
+             * TÍTULO
+             */
+
+            const titleCanvas =
+                document.createElement(
+                    "canvas"
+                );
+
+
+            titleCanvas.width = 700;
+
+            titleCanvas.height = 150;
+
+
+            const titleCtx =
+                titleCanvas.getContext(
+                    "2d"
+                );
+
+
+            titleCtx.fillStyle =
+                "rgba(3,7,25,.95)";
+
+
+            drawRoundedRect(
+
+                titleCtx,
+
+                20,
+
+                20,
+
+                660,
+
+                110,
+
+                25
+
+            );
+
+
+            titleCtx.fill();
+
+
+            titleCtx.strokeStyle =
+
+                index % 2 === 0
+
+                    ? "#ffc107"
+
+                    : "#4da3ff";
+
+
+            titleCtx.lineWidth = 5;
+
+
+            drawRoundedRect(
+
+                titleCtx,
+
+                20,
+
+                20,
+
+                660,
+
+                110,
+
+                25
+
+            );
+
+
+            titleCtx.stroke();
+
+
+            titleCtx.fillStyle =
+                "#ffe27b";
+
+
+            titleCtx.font =
+                "bold 34px Arial";
+
+
+            titleCtx.textAlign =
+                "center";
+
+
+            titleCtx.textBaseline =
+                "middle";
+
+
+            titleCtx.fillText(
+
+                "VIDEO " +
+                (index + 1),
+
+                350,
+
+                75
+
+            );
+
+
+            const titleTexture =
+                new THREE.CanvasTexture(
+                    titleCanvas
+                );
+
+
+            const titleSprite =
+                new THREE.Sprite(
+
+                    new THREE.SpriteMaterial({
+
+                        map:
+                            titleTexture,
+
+                        transparent:
+                            true,
+
+                        depthTest:
+                            false
+
+                    })
+
+                );
+
+
+            titleSprite.scale.set(
+
+                4.8,
+
+                1.03,
+
+                1
+
+            );
+
+
+            titleSprite.position.y =
+                height / 2 + .9;
+
+
+            group.add(
+                titleSprite
+            );
+
+
+            /*
+             * PLAY
+             */
+
+            const playCanvas =
+                document.createElement(
+                    "canvas"
+                );
+
+
+            playCanvas.width = 600;
+
+            playCanvas.height = 180;
+
+
+            const playCtx =
+                playCanvas.getContext(
+                    "2d"
+                );
+
+
+            playCtx.fillStyle =
+                "rgba(0,0,0,.60)";
+
+
+            drawRoundedRect(
+
+                playCtx,
+
+                80,
+
+                35,
+
+                440,
+
+                110,
+
+                35
+
+            );
+
+
+            playCtx.fill();
+
+
+            playCtx.fillStyle =
+                "#fff";
+
+
+            playCtx.font =
+                "bold 38px Arial";
+
+
+            playCtx.textAlign =
+                "center";
+
+
+            playCtx.textBaseline =
+                "middle";
+
+
+            playCtx.fillText(
+
+                "▶  VER VIDEO",
+
+                300,
+
+                90
+
+            );
+
+
+            const playTexture =
+                new THREE.CanvasTexture(
+                    playCanvas
+                );
+
+
+            const playSprite =
+                new THREE.Sprite(
+
+                    new THREE.SpriteMaterial({
+
+                        map:
+                            playTexture,
+
+                        transparent:
+                            true,
+
+                        depthTest:
+                            false
+
+                    })
+
+                );
+
+
+            playSprite.scale.set(
+
+                3.3,
+
+                .99,
+
+                1
+
+            );
+
+
+            playSprite.position.z =
+                .15;
+
+
+            group.add(
+                playSprite
+            );
+
+
+            /*
+             * POSICIÓN
+             */
+
+            const angle =
+                index /
+                videos.length *
+                Math.PI *
+                2;
+
+
+            group.position.x =
+                Math.cos(angle) *
+                radius;
+
+
+            group.position.z =
+                Math.sin(angle) *
+                radius;
+
+
+            group.position.y =
+
+                index % 2 === 0
+
+                    ? 3.5
+
+                    : -3.1;
+
+
+            group.rotation.y =
+                -angle +
+                Math.PI / 2;
+
+
+            /*
+             * DATOS
+             */
+
+            group.userData = {
+
+                type: "videoCard",
+
+                video: video,
+
+                data: data,
+
+                index: index
+
+            };
+
+
+            [
+                videoMesh,
+
+                top,
+
+                bottom,
+
+                left,
+
+                right,
+
+                titleSprite,
+
+                playSprite
+
+            ].forEach(
+                object => {
+
+                    object.userData.videoCard =
+                        group;
+
+                }
+            );
+
+
+            /*
+             * ERROR VIDEO
+             */
+
+            video.addEventListener(
+
+                "error",
+
+                function () {
+
+                    console.error(
+
+                        "NO SE PUDO CARGAR:",
+
+                        data.src
+
+                    );
+
+                }
+
+            );
+
+
+            /*
+             * METADATA
+             */
+
+            video.addEventListener(
+
+                "loadedmetadata",
+
+                function () {
+
+                    console.log(
+
+                        "Video encontrado:",
+
+                        data.src
+
+                    );
+
+                }
+
+            );
+
+
+            scene.add(
+                group
+            );
+
+
+            videoObjects.push({
+
+                group:
+                    group,
+
+                video:
+                    video,
+
+                texture:
+                    texture,
+
+                playSprite:
+                    playSprite,
+
+                data:
+                    data
+
+            });
+
+        }
+    );
+
+
+    console.log(
+
+        "Tarjetas de vídeo:",
+
+        videoObjects.length
+
+    );
+
+}
+
+
+/* ============================================================
+   CLIC VIDEO
+============================================================ */
+
+function clickVideo(
+
+    x,
+
+    y
+
+) {
+
+    setMouse(
+        x,
+        y
+    );
+
+
+    raycaster.setFromCamera(
+
+        mouse,
+
+        camera
+
+    );
+
+
+    const objects = [];
+
+
+    videoObjects.forEach(
+
+        item => {
+
+            item.group.traverse(
+
+                child => {
+
+                    if (
+
+                        child.isMesh ||
+
+                        child.isSprite
+
+                    ) {
+
+                        objects.push(
+                            child
+                        );
+
+                    }
+
+                }
+
+            );
+
+        }
+
+    );
+
+
+    const hits =
+        raycaster.intersectObjects(
+
+            objects,
+
+            true
+
+        );
+
+
+    if (
+        hits.length === 0
+    ) {
+
+        return false;
+
+    }
+
+
+    let card =
+        hits[0]
+            .object
+            .userData
+            .videoCard;
+
+
+    let current =
+        hits[0].object;
+
+
+    while (
+        !card &&
+        current
+    ) {
+
+        if (
+
+            current.userData &&
+
+            current.userData.type ===
+                "videoCard"
+
+        ) {
+
+            card =
+                current;
+
+        }
+
+
+        current =
+            current.parent;
+
+    }
+
+
+    if (!card) {
+
+        return false;
+
+    }
+
+
+    openVideo(
+        card
+    );
+
+
+    return true;
+
+}
+
+
+/* ============================================================
+   ABRIR VIDEO
+============================================================ */
+
+function openVideo(
+    card
+) {
+
+    const data =
+        card.userData.data;
+
+
+    const video =
+        card.userData.video;
+
+
+    selectedVideo =
+        card;
+
+
+    /*
+     * PAUSAR OTROS
+     */
+
+    videoObjects.forEach(
+
+        item => {
+
+            if (
+                item.video !==
+                video
+            ) {
+
+                item.video.pause();
+
+            }
+
+        }
+
+    );
+
+
+    const modal =
+        document.getElementById(
+            "video-modal"
+        );
+
+
+    const viewer =
+        document.getElementById(
+            "viewer-video"
+        );
+
+
+    const info =
+        document.getElementById(
+            "video-info"
+        );
+
+
+    info.textContent =
+        data.title;
+
+
+    viewer.pause();
+
+
+    viewer.src =
+        data.src;
+
+
+    viewer.load();
+
+
+    modal.classList.add(
+        "active"
+    );
+
+
+    const playViewer =
+        viewer.play();
+
+
+    if (
+
+        playViewer &&
+
+        typeof playViewer.catch ===
+            "function"
+
+    ) {
+
+        playViewer.catch(
+            function () {
+
+                console.log(
+                    "Esperando interacción del usuario..."
+                );
+
+            }
+        );
+
+    }
+
+
+    const play3D =
+        video.play();
+
+
+    if (
+
+        play3D &&
+
+        typeof play3D.catch ===
+            "function"
+
+    ) {
+
+        play3D.catch(
+            function () {}
+        );
+
+    }
+
+
+    videoObjects.forEach(
+
+        item => {
+
+            item.playSprite.visible =
+                item.video.paused;
+
+        }
+
+    );
+
+}
+
+
+/* ============================================================
+   CLIC MENSAJE
+============================================================ */
+
+function clickMessage(
+
+    x,
+
+    y
+
+) {
+
+    setMouse(
+        x,
+        y
+    );
+
+
+    raycaster.setFromCamera(
+
+        mouse,
+
+        camera
+
+    );
+
+
+    const hits =
+        raycaster.intersectObjects(
+
+            messageObjects
+
+        );
+
+
+    if (
+        hits.length === 0
+    ) {
+
+        return false;
+
+    }
+
+
+    const data =
+        hits[0]
+            .object
+            .userData
+            .data;
+
+
+    document.getElementById(
+        "letter-title"
+    ).textContent =
+        data.title;
+
+
+    document.getElementById(
+        "letter-message"
+    ).textContent =
+        data.text;
+
+
+    document
+        .getElementById(
+            "letter-modal"
+        )
+        .classList.add(
+            "active"
+        );
+
+
+    return true;
+
+}
+
+
+/* ============================================================
+   EVENTOS HTML
+============================================================ */
+
+function setupEvents() {
+
+
+    /*
+     * CERRAR EDITOR
+     */
+
+    document
+        .getElementById(
+            "close-editor"
+        )
+        .addEventListener(
+
+            "click",
+
+            function () {
+
+                closeModal(
+                    "editor-modal"
+                );
+
+            }
+
+        );
+
+
+    /*
+     * CERRAR VIDEO
+     */
+
+    document
+        .getElementById(
+            "close-video-modal"
+        )
+        .addEventListener(
+
+            "click",
+
+            function () {
+
+                closeVideoModal();
+
+            }
+
+        );
+
+
+    /*
+     * CERRAR CARTA
+     */
+
+    document
+        .getElementById(
+            "close-letter"
+        )
+        .addEventListener(
+
+            "click",
+
+            function () {
+
+                closeModal(
+                    "letter-modal"
+                );
+
+            }
+
+        );
+
+
+    /*
+     * SELECTORES DE VIDEO
+     *
+     * El modal todavía conserva
+     * esta función.
+     */
+
+    document
+        .querySelectorAll(
+            ".video-selector"
+        )
+        .forEach(
+
+            button => {
+
+                button.addEventListener(
+
+                    "click",
+
+                    function () {
+
+                        const index =
+                            Number(
+                                this.dataset.index
+                            );
+
+
+                        if (
+                            videoObjects[index]
+                        ) {
+
+                            openVideo(
+
+                                videoObjects[
+                                    index
+                                ].group
+
+                            );
+
+                        }
+
+                    }
+
+                );
+
+            }
+
+        );
+
+
+    /*
+     * AGREGAR MENSAJE
+     */
+
+    document
+        .getElementById(
+            "add-message"
+        )
+        .addEventListener(
+
+            "click",
+
+            addMessage
+
+        );
+
+}
+
+
+/* ============================================================
+   CERRAR VIDEO
+============================================================ */
+
+function closeVideoModal() {
+
+    const viewer =
+        document.getElementById(
+            "viewer-video"
+        );
+
+
+    viewer.pause();
+
+
+    viewer.removeAttribute(
+        "src"
+    );
+
+
+    viewer.load();
+
+
+    videoObjects.forEach(
+
+        item => {
+
+            item.video.pause();
+
+            item.playSprite.visible =
+                true;
+
+        }
+
+    );
+
+
+    document
+        .getElementById(
+            "video-modal"
+        )
+        .classList.remove(
+            "active"
+        );
+
+
+    selectedVideo =
+        null;
+
+}
+
+
+/* ============================================================
+   CERRAR MODAL
+============================================================ */
+
+function closeModal(
+    id
+) {
+
+    document
+        .getElementById(
+            id
+        )
+        .classList.remove(
+            "active"
+        );
+
+}
+
+
+/* ============================================================
+   EDITOR
+============================================================ */
+
+function renderEditor() {
+
+    const container =
+        document.getElementById(
+            "messages-container"
+        );
+
+
+    container.innerHTML =
+        "";
+
+
+    messages.forEach(
+
+        item => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "message-row";
+
+
+            row.innerHTML = `
+
+                <div>
+
+                    <strong>
+
+                        ${escapeHTML(
+                            item.title
+                        )}
+
+                    </strong>
+
+                    <span>
+
+                        ${escapeHTML(
+                            item.text
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <button
+                    class="delete-btn"
+                    data-id="${item.id}">
+
+                    <i class="fas fa-trash"></i>
+
+                </button>
+
+            `;
+
+
+            row
+                .querySelector(
+                    ".delete-btn"
+                )
+                .addEventListener(
+
+                    "click",
+
+                    function () {
+
+                        const id =
+                            Number(
+                                this.dataset.id
+                            );
+
+
+                        messages =
+                            messages.filter(
+
+                                item =>
+                                    item.id !==
+                                    id
+
+                            );
+
+
+                        createMessages();
+
+                        renderEditor();
+
+                    }
+
+                );
+
+
+            container.appendChild(
+                row
+            );
+
+        }
+
+    );
+
+}
+
+
+/* ============================================================
+   AGREGAR MENSAJE
+============================================================ */
+
+function addMessage() {
+
+    const title =
+        document
+            .getElementById(
+                "new-title"
+            )
+            .value
+            .trim();
+
+
+    const text =
+        document
+            .getElementById(
+                "new-message"
+            )
+            .value
+            .trim();
+
+
+    if (
+        !title ||
+        !text
+    ) {
+
+        alert(
+            "Escribe el título y el mensaje."
+        );
+
+
+        return;
+
+    }
+
+
+    messages.push({
+
+        id:
+            Date.now(),
+
+        title:
+            title,
+
+        text:
+            text
+
+    });
+
+
+    document
+        .getElementById(
+            "new-title"
+        )
+        .value =
+        "";
+
+
+    document
+        .getElementById(
+            "new-message"
+        )
+        .value =
+        "";
+
+
+    createMessages();
+
+    renderEditor();
+
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
+
+function escapeHTML(
+    value
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        value;
+
+
+    return div.innerHTML;
+
+}
+
+
+/* ============================================================
+   RESET
+============================================================ */
+
+function reset() {
+
+    videoObjects.forEach(
+
+        item => {
+
+            item.video.pause();
+
+        }
+
+    );
+
+
+    const viewer =
+        document.getElementById(
+            "viewer-video"
+        );
+
+
+    viewer.pause();
+
+
+    viewer.removeAttribute(
+        "src"
+    );
+
+
+    viewer.load();
+
+
+    document
+        .querySelectorAll(
+            ".modal"
+        )
+        .forEach(
+
+            modal => {
+
+                modal.classList.remove(
+                    "active"
+                );
+
+            }
+
+        );
+
+
+    galaxyMusic.pause();
+
+    galaxyMusic.currentTime = 0;
+
+
+    boomSound.pause();
+
+    boomSound.currentTime = 0;
+
+
+    state =
+        "ROSE";
+
+
+    roseGroup.visible =
+        true;
+
+
+    document
+        .getElementById(
+            "instruction-overlay"
+        )
+        .classList.remove(
+            "hide"
+        );
+
+
+    cameraYaw = 0;
+
+    cameraPitch = 0;
+
+    targetYaw = 0;
+
+    targetPitch = 0;
+
+    cameraDistance = 24;
+
+}
+
+
+/* ============================================================
+   ANIMACIÓN
+============================================================ */
+
+function animate() {
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    const elapsed =
+        clock.getElapsedTime();
+
+
+    /*
+     * ESTRELLAS
+     */
+
+    if (stars) {
+
+        stars.rotation.y =
+            elapsed *
+            .008;
+
+    }
+
+
+    /*
+     * GALAXIA
+     */
+
+    if (galaxyGroup) {
+
+        galaxyGroup.rotation.y =
+            elapsed *
+            .025;
+
+    }
+
+
+    /*
+     * ROSA
+     */
+
+    if (
+
+        roseGroup &&
+
+        roseGroup.visible
+
+    ) {
+
+        roseGroup.rotation.y =
+            elapsed *
+            .45;
+
+
+        const scale =
+            1.3 +
+            Math.sin(
+                elapsed * 2
+            ) *
+            .05;
+
+
+        roseGroup.scale.set(
+
+            scale,
+
+            scale,
+
+            scale
+
+        );
+
+    }
+
+
+    /*
+     * CÁMARA
+     */
+
+    cameraYaw +=
+
+        (
+            targetYaw -
+            cameraYaw
+        ) *
+        .08;
+
+
+    cameraPitch +=
+
+        (
+            targetPitch -
+            cameraPitch
+        ) *
+        .08;
+
+
+    if (
+        state === "GALAXY"
+    ) {
+
+        camera.position.x =
+
+            Math.sin(
+                cameraYaw
+            ) *
+
+            Math.cos(
+                cameraPitch
+            ) *
+
+            cameraDistance;
+
+
+        camera.position.y =
+
+            Math.sin(
+                cameraPitch
+            ) *
+
+            cameraDistance;
+
+
+        camera.position.z =
+
+            Math.cos(
+                cameraYaw
+            ) *
+
+            Math.cos(
+                cameraPitch
+            ) *
+
+            cameraDistance;
+
+
+        camera.lookAt(
+            0,
+            0,
+            0
+        );
+
+    }
+
+
+    /*
+     * MENSAJES
+     */
+
+    messageObjects.forEach(
+
+        (
+            sprite,
+            index
+        ) => {
+
+            const originalY =
+
+                index % 2 === 0
+
+                    ? 1.8
+
+                    : -1.2;
+
+
+            sprite.position.y =
+
+                originalY +
+
+                Math.sin(
+
+                    elapsed *
+
+                    1.1 +
+
+                    index
+
+                ) *
+
+                .18;
+
+        }
+
+    );
+
+
+    /*
+     * VIDEOS
+     */
+
+    videoObjects.forEach(
+
+        (
+            item,
+            index
+        ) => {
+
+            const originalY =
+
+                index % 2 === 0
+
+                    ? 3.5
+
+                    : -3.1;
+
+
+            item.group.position.y =
+
+                originalY +
+
+                Math.sin(
+
+                    elapsed *
+
+                    1.1 +
+
+                    index
+
+                ) *
+
+                .22;
+
+
+            item.group.rotation.z =
+
+                Math.sin(
+
+                    elapsed *
+
+                    .7 +
+
+                    index
+
+                ) *
+
+                .035;
+
+
+            /*
+             * Mostrar botón PLAY
+             * solamente cuando está pausado.
+             */
+
+            item.playSprite.visible =
+                item.video.paused;
+
+        }
+
+    );
+
+
+    renderer.render(
+
+        scene,
+
+        camera
+
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
