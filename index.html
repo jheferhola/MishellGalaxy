@@ -316,6 +316,80 @@
 
         }
 
+        /* =====================================================
+           BOTÓN: NUESTRO INICIO DE RECUERDOS
+        ===================================================== */
+
+        #recuerdos-button {
+            position: fixed;
+            top: 155px;
+            left: 25px;
+            z-index: 30;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            max-width: calc(100vw - 32px);
+            padding: 13px 18px;
+            border: 1px solid rgba(255, 216, 77, .55);
+            border-radius: 16px;
+            color: #fff8df;
+            text-decoration: none;
+            background: linear-gradient(135deg, rgba(42, 22, 72, .94), rgba(116, 35, 91, .94));
+            box-shadow: 0 8px 28px rgba(0, 0, 0, .35), 0 0 22px rgba(255, 105, 180, .16);
+            backdrop-filter: blur(10px);
+            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+        }
+
+        #recuerdos-button:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 216, 77, .95);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, .42), 0 0 26px rgba(255, 105, 180, .3);
+        }
+
+        #recuerdos-button .recuerdos-heart {
+            color: #ff91bd;
+            font-size: 27px;
+            line-height: 1;
+            text-shadow: 0 0 12px rgba(255, 145, 189, .5);
+        }
+
+        #recuerdos-button strong,
+        #recuerdos-button small {
+            display: block;
+        }
+
+        #recuerdos-button strong {
+            font-size: 13px;
+            letter-spacing: .2px;
+        }
+
+        #recuerdos-button small {
+            margin-top: 4px;
+            color: #d9d3e8;
+            font-size: 10px;
+        }
+
+        @media (max-width: 700px) {
+            #recuerdos-button {
+                top: 108px;
+                left: 12px;
+                padding: 10px 13px;
+                gap: 9px;
+                border-radius: 13px;
+            }
+
+            #recuerdos-button .recuerdos-heart {
+                font-size: 23px;
+            }
+
+            #recuerdos-button strong {
+                font-size: 11px;
+            }
+
+            #recuerdos-button small {
+                font-size: 9px;
+            }
+        }
 
         /* =====================================================
            HINT INFERIOR
