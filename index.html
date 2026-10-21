@@ -326,6 +326,10 @@
             left: 25px;
             z-index: 60;
             display: inline-flex;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .5s ease, visibility .5s ease, transform .25s ease, box-shadow .25s ease, border-color .25s ease;
             align-items: center;
             gap: 12px;
             max-width: calc(100vw - 32px);
@@ -337,7 +341,12 @@
             background: linear-gradient(135deg, rgba(42, 22, 72, .94), rgba(116, 35, 91, .94));
             box-shadow: 0 8px 28px rgba(0, 0, 0, .35), 0 0 22px rgba(255, 105, 180, .16);
             backdrop-filter: blur(10px);
-            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+        }
+
+        #recuerdos-button.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         #recuerdos-button:hover {
@@ -2513,6 +2522,15 @@ function activateGalaxy() {
         .classList.add(
             "hide"
         );
+
+
+    /*
+     * MOSTRAR BOTÓN DE RECUERDOS
+     * solo después de iniciar la galaxia.
+     */
+    document
+        .getElementById("recuerdos-button")
+        .classList.add("show");
 
 
     /*
@@ -4702,6 +4720,10 @@ function reset() {
         .classList.remove(
             "hide"
         );
+
+    document
+        .getElementById("recuerdos-button")
+        .classList.remove("show");
 
 
     cameraYaw = 0;
