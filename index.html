@@ -841,7 +841,74 @@
             }
 
         }
+.boton-videitos {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 16px 28px;
+    border-radius: 18px;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(135deg, #c44569, #8e2a59, #54204b);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 25px rgba(196, 69, 105, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
 
+.boton-videitos:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 14px 35px rgba(196, 69, 105, 0.45);
+}
+
+.videitos-heart {
+    font-size: 35px;
+    line-height: 1;
+    animation: latido 1.5s ease-in-out infinite;
+}
+
+.videitos-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.videitos-texto strong {
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+
+.videitos-texto small {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+@keyframes latido {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+@media (max-width: 480px) {
+    .boton-videitos {
+        padding: 14px 18px;
+        gap: 10px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .videitos-texto strong {
+        font-size: 13px;
+    }
+
+    .videitos-texto small {
+        font-size: 11px;
+    }
+}
     </style>
 
 </head>
@@ -933,13 +1000,14 @@
 
 <a id="apartado-button"
    href="https://jheferhola.github.io/apartado/"
-   aria-label="Ir Los Videitos">
+   aria-label="Ir a los videitos"
+   class="boton-videitos">
 
-    <span class="recuerdos-heart" aria-hidden="true">♡</span>
+    <span class="videitos-heart" aria-hidden="true">♡</span>
 
-    <span>
+    <span class="videitos-texto">
         <strong>VIDEITOS DE TU BELLEZA</strong>
-        <small>Un pequeño recorrido por los videitos que te tome jejeje ✨</small>
+        <small>Un pequeño recorrido por los videitos que te tomé jejeje ✨</small>
     </span>
 
 </a>
